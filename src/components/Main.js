@@ -9,20 +9,20 @@ const Main = (props) => {
   const createTaskHandler = () => {
     setAddTask(true);
   };
-//   let content;
-//   useEffect(() => {
-//     // setAddTask(false);
-//     console.log(props.tasks);
-//     content = props.tasks.map((task) => {
-//         return (
-//           <IndividualTask
-//             title={task.title}
-//             description={task.description}
-//             due={task.due_date}
-//           />
-//         );
-//       })
-//   }, [props.tasks]);
+  //   let content;
+  //   useEffect(() => {
+  //     // setAddTask(false);
+  //     console.log(props.tasks);
+  //     content = props.tasks.map((task) => {
+  //         return (
+  //           <IndividualTask
+  //             title={task.title}
+  //             description={task.description}
+  //             due={task.due_date}
+  //           />
+  //         );
+  //       })
+  //   }, [props.tasks]);
   return (
     <div>
       <Button onClick={createTaskHandler}>Create Task</Button>
@@ -52,7 +52,7 @@ const Main = (props) => {
               />
             );
           })}
-          {/* {content} */}
+        {/* {content} */}
       </div>
     </div>
   );

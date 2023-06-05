@@ -36,7 +36,7 @@ const Signup = () => {
     setEnteredEmailTouched(true);
   };
 
-  const formSubmissionHandler = (event) => {
+  async function formSubmissionHandler(event) {
     event.preventDefault();
 
     setEnteredNameTouched(true);
@@ -49,7 +49,24 @@ const Signup = () => {
     setEnteredNameTouched(false);
     setEnteredEmail("");
     setEnteredEmailTouched(false);
-  };
+
+    try {
+      const response = await fetch("https://abc", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: {
+          name: enteredName,
+          email: enteredEmail,
+        },
+      });
+      const result = response.json();
+      console.log(result);
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
 
   return (
     <div className={classes.container}>
@@ -67,7 +84,9 @@ const Signup = () => {
               onChange={nameChangeHandler}
               onBlur={nameBlurHandler}
             ></input>
-            {nameIsInvalid && <p className={classes['error-text']}>Name must not be empty.</p>}
+            {nameIsInvalid && (
+              <p className={classes["error-text"]}>Name must not be empty.</p>
+            )}
           </div>
 
           <div>
@@ -81,7 +100,9 @@ const Signup = () => {
               onBlur={emailBlurHandler}
             ></input>
             {enteredEmailIsInvalid && (
-              <p className={classes['error-text']}>Please enter a valid email.</p>
+              <p className={classes["error-text"]}>
+                Please enter a valid email.
+              </p>
             )}
           </div>
 
