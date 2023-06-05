@@ -39,4 +39,6 @@ input[type="email"]:hover {
   margin-top: 50px;
   text-align: center;
 }
-
+.error-text {
+  color: #b40e0e;
+}
