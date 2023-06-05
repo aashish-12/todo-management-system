@@ -14,7 +14,7 @@ const Task = (props) => {
         <p>Due Date: {props.due}</p>
       </div>
       <div className={`${classes.div} ${classes.button}`}>
-        <Button onClick={deleteHandler}>Delete</Button>
+        <Button className={classes.button} onClick={deleteHandler}>Delete</Button>
       </div>
     </Card>
   );
