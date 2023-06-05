@@ -38,7 +38,7 @@ const CreateTask = (props) => {
     setEnteredDescription("");
     setEnteredTitle("");
     // content= <></>;
-    console.log(props.data);
+    // console.log(props.data);
   }
   return (
     <Card>

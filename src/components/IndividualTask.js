@@ -3,6 +3,9 @@ import Button from "./UI/Button";
 import Card from "./UI/Card";
 
 const Task = (props) => {
+  const deleteHandler = (props, event) => {
+    //console.log(event.target.key)
+  };
   return (
     <Card>
       <h3>{props.title}</h3>
@@ -11,7 +14,7 @@ const Task = (props) => {
         <p>Due Date: {props.due}</p>
       </div>
       <div className={`${classes.div} ${classes.button}`}>
-        <Button>Delete</Button>
+        <Button onClick={deleteHandler}>Delete</Button>
       </div>
     </Card>
   );

@@ -11,7 +11,7 @@ const tasks = [
     due_date: "06-05-2023",
     assignee: "developer",
   },
-];
+]; //tasks of particular user
 function App() {
   return (
     <React.Fragment>
