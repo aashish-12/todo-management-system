@@ -20,7 +20,27 @@ const CreateTask = (props) => {
   const titleChangeHandler = (event) => {
     setEnteredTitle(event.target.value);
   };
-  let content = (
+
+  function addTaskHandler(event) {
+    event.preventDefault();
+    // content = <></>;
+    const add = {
+      key: Math.random(),
+      title: enteredTitle,
+      description: enteredDescription,
+      due_date: enteredDate,
+      assignee: enteredAssignee,
+    };
+
+    props.data.push(add);
+    setEnteredAssignee("");
+    setEnteredDate("");
+    setEnteredDescription("");
+    setEnteredTitle("");
+    // content= <></>;
+    console.log(props.data);
+  }
+  return (
     <Card>
       <form className={classes.form}>
         <h3>Add Your Task</h3>
@@ -57,28 +77,6 @@ const CreateTask = (props) => {
       </form>
     </Card>
   );
-
-  function addTaskHandler(event) {
-    event.preventDefault();
-    // content = <></>;
-    const add = {
-      key: Math.random(),
-      title: enteredTitle,
-      description: enteredDescription,
-      due_date: enteredDate,
-      assignee: enteredAssignee,
-    };
-
-    props.data.push(add);
-    setEnteredAssignee("");
-    setEnteredDate("");
-    setEnteredDescription("");
-    setEnteredTitle("");
-    content= <></>;
-    console.log(add);
-
-  }
-  return <>{content}</>;
 };
 
 export default CreateTask;
