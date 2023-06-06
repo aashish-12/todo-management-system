@@ -1,7 +1,9 @@
-import React from "react";
+import React, {useState} from "react";
 import "./App.css";
 import Header from "./components/Header";
 import Main from "./components/Main";
+import Signup from './components/Signup';
+import Login from './components/Login';
 const tasks = [
   {
     key: 12,
@@ -29,12 +31,29 @@ const tasks = [
   },
 ]; //tasks of particular user
 function App() {
-  return (
-    <React.Fragment>
-      <Header></Header>
+  const [signUp, setSignUp] = useState(false);
+  const [login, setLogin] = useState(false);
+  let content = (
+    <>
+      <Header loginHandler={loginHandler} signupHandler={signUpHandler}></Header>
       <Main tasks={tasks}></Main>
-    </React.Fragment>
+    </>
   );
+  function loginHandler() {
+    console.log("login");
+    setLogin(true);
+  }
+  function signUpHandler() {
+    console.log("clicked");
+    setSignUp(true);
+  }
+  if (signUp) {
+    content = <Signup />;
+  }
+  if (login) {
+    content = <Login />;
+  }
+  return <React.Fragment>{content}</React.Fragment>;
 }
 
 export default App;

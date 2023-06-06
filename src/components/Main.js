@@ -9,20 +9,6 @@ const Main = (props) => {
   const createTaskHandler = () => {
     setAddTask(true);
   };
-  //   let content;
-  //   useEffect(() => {
-  //     // setAddTask(false);
-  //     console.log(props.tasks);
-  //     content = props.tasks.map((task) => {
-  //         return (
-  //           <IndividualTask
-  //             title={task.title}
-  //             description={task.description}
-  //             due={task.due_date}
-  //           />
-  //         );
-  //       })
-  //   }, [props.tasks]);
   return (
     <div>
       <Button onClick={createTaskHandler}>Create Task</Button>
@@ -30,6 +16,19 @@ const Main = (props) => {
         {addTask && (
           <>
             <CreateTask data={props.tasks} />
+            <ul>
+              {props.tasks.map((task) => (
+                <IndividualTask
+                  title={task.title}
+                  description={task.description}
+                  due={task.due_date}
+                />
+              ))}
+            </ul>
+          </>
+        )}
+        {!addTask && (
+          <ul>
             {props.tasks.map((task) => {
               return (
                 <IndividualTask
@@ -39,19 +38,8 @@ const Main = (props) => {
                 />
               );
             })}
-          </>
+          </ul>
         )}
-        {!addTask &&
-          props.tasks.map((task) => {
-            return (
-              <IndividualTask
-                title={task.title}
-                description={task.description}
-                due={task.due_date}
-                key={task.key}
-              />
-            );
-          })}
         {/* {content} */}
       </div>
     </div>

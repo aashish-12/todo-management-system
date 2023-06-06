@@ -42,7 +42,7 @@ const CreateTask = (props) => {
   }
   return (
     <Card>
-      <form className={classes.form}>
+      <form className={classes.form} onSubmit={addTaskHandler}>
         <h3>Add Your Task</h3>
         <label id="title">Title</label>
         <input
@@ -73,7 +73,7 @@ const CreateTask = (props) => {
           value={enteredAssignee}
           onChange={assigneeChangeHandler}
         ></input>
-        <Button onClick={addTaskHandler}>Add Task</Button>
+        <Button>Add Task</Button>
       </form>
     </Card>
   );
