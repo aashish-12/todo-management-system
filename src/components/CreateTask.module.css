@@ -2,15 +2,15 @@
   color: black;
 }
 input[type="text"] {
-  border: 2px solid #ccc;
+  border: 1px solid #ccc;
   border-radius: 10px;
   padding: 12px;
   margin-bottom: 15px;
-  width: 95%;
+  width: 75%;
   box-sizing: border-box;
   font-size: 10px;
   outline: none;
 }
 input[type="text"]:hover {
-  border: 2px solid #e0b0f0;
+  border: 1px solid #e0b0f0;
 }

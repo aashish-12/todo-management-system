@@ -1,12 +1,13 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import "./App.css";
 import Header from "./components/Header";
 import Main from "./components/Main";
-import Signup from './components/Signup';
-import Login from './components/Login';
-const tasks = [
+import Signup from "./components/Signup";
+import Login from "./components/Login";
+import TaskList from "./components/TaskList";
+let tasks = [
   {
-    key: 12,
+    id: "12",
     title: "ToDo Management System",
     description:
       "It is a software application designed to help users organize and manage their tasks effectively",
@@ -14,7 +15,7 @@ const tasks = [
     assignee: "developer",
   },
   {
-    key: 11,
+    id: "11",
     title: "Hotel Management System",
     description:
       "It is a software application designed to help users organize and manage their hotel site effectively",
@@ -22,7 +23,7 @@ const tasks = [
     assignee: "software",
   },
   {
-    key: 10,
+    id: "10",
     title: "DCRUST",
     description:
       "It is a software application designed to help users organize and manage their tasks effectively.....",
@@ -33,10 +34,27 @@ const tasks = [
 function App() {
   const [signUp, setSignUp] = useState(false);
   const [login, setLogin] = useState(false);
+  const [taskList, setTaskList] = useState(tasks);
+
+  const addNewTasksHandler = (task) => {
+    setTaskList((prevTask) => {
+      return [task, ...prevTask];
+    });
+  };
+  const deleteTask = (id) => {
+    console.log(id);
+    const newList = taskList.filter((task) => task.id !== id);
+    // console.log(newList);
+    setTaskList(newList);
+  };
   let content = (
     <>
-      <Header loginHandler={loginHandler} signupHandler={signUpHandler}></Header>
-      <Main tasks={tasks}></Main>
+      <Header
+        loginHandler={loginHandler}
+        signupHandler={signUpHandler}
+      ></Header>
+      <Main onAddNew={addNewTasksHandler}></Main>
+      <TaskList tasks={taskList} deleteId={deleteTask} />
     </>
   );
   function loginHandler() {

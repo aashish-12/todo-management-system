@@ -2,20 +2,19 @@ import classes from "./IndividualTask.module.css";
 import Button from "./UI/Button";
 import Card from "./UI/Card";
 
-const Task = (props) => {
-  const deleteHandler = (props, event) => {
-    //console.log(event.target.key)
-  };
+const IndividualTask = (props) => {
+  
   return (
     <li>
       <Card>
         <h3>{props.title}</h3>
         <p>{props.description}</p>
+        {/* <p>Assignee: {props.assignee}</p> */}
         <div className={classes.div}>
-          <p>Due Date: {props.due}</p>
+          <p>Due Date: {props.date}</p>
         </div>
         <div className={`${classes.div} ${classes.button}`}>
-          <Button className={classes.button} onClick={deleteHandler}>
+          <Button className={classes.button} onClick={props.deleteHandler} >
             Delete
           </Button>
         </div>
@@ -24,4 +23,4 @@ const Task = (props) => {
   );
 };
 
-export default Task;
+export default IndividualTask;

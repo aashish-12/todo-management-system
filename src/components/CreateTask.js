@@ -25,14 +25,13 @@ const CreateTask = (props) => {
     event.preventDefault();
     // content = <></>;
     const add = {
-      key: Math.random(),
       title: enteredTitle,
       description: enteredDescription,
       due_date: enteredDate,
       assignee: enteredAssignee,
     };
 
-    props.data.push(add);
+    props.onAdd(add);
     setEnteredAssignee("");
     setEnteredDate("");
     setEnteredDescription("");
@@ -44,17 +43,17 @@ const CreateTask = (props) => {
     <Card>
       <form className={classes.form} onSubmit={addTaskHandler}>
         <h3>Add Your Task</h3>
-        <label id="title">Title</label>
+        <label htmlFor="title">Title</label>
         <input
           type="text"
-          htmlFor="title"
+          id="title"
           value={enteredTitle}
           onChange={titleChangeHandler}
         ></input>
-        <label id="description">Description</label>
+        <label htmlFor="description">Description</label>
         <input
           type="text"
-          htmlFor="description"
+          id="description"
           value={enteredDescription}
           onChange={descriptionChangeHandler}
         ></input>
@@ -66,14 +65,15 @@ const CreateTask = (props) => {
           onChange={dateChangeHandler}
         ></input>
         <br></br>
-        <label id="assignee">Assignee</label>
+        <label htmlFor="assignee">Assignee</label>
         <input
           type="text"
-          htmlFor="assignee"
+          id="assignee"
           value={enteredAssignee}
           onChange={assigneeChangeHandler}
         ></input>
         <Button>Add Task</Button>
+        <Button onClick={props.onCancel}>Cancel</Button>
       </form>
     </Card>
   );

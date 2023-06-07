@@ -1,48 +1,35 @@
 import classes from "./Main.module.css";
 import Button from "./UI/Button";
-import IndividualTask from "./IndividualTask";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import CreateTask from "./CreateTask";
 
 const Main = (props) => {
   const [addTask, setAddTask] = useState(false);
+  const addNewTask = (add) => {
+    const newTask = {
+      ...add, id: Math.random().toString(),
+      
+    }
+    props.onAddNew(newTask);
+    setAddTask(false);
+  };
   const createTaskHandler = () => {
     setAddTask(true);
   };
+  const stopAdding =()=>{
+    setAddTask(false)
+  }
+  
+
   return (
-    <div>
-      <Button onClick={createTaskHandler}>Create Task</Button>
-      <div className={classes.main}>
-        {addTask && (
-          <>
-            <CreateTask data={props.tasks} />
-            <ul>
-              {props.tasks.map((task) => (
-                <IndividualTask
-                  title={task.title}
-                  description={task.description}
-                  due={task.due_date}
-                />
-              ))}
-            </ul>
-          </>
-        )}
-        {!addTask && (
-          <ul>
-            {props.tasks.map((task) => {
-              return (
-                <IndividualTask
-                  title={task.title}
-                  description={task.description}
-                  due={task.due_date}
-                />
-              );
-            })}
-          </ul>
-        )}
-        {/* {content} */}
-      </div>
-    </div>
+    <>
+      <section>
+        {!addTask && <Button onClick={createTaskHandler}>Create Task</Button>}
+      </section>
+      <section className={classes.main}>
+        {addTask && <CreateTask  onAdd={addNewTask} onCancel={stopAdding}/>}
+      </section>
+    </>
   );
 };
 
