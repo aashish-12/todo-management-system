@@ -15,11 +15,26 @@ const Signup = () => {
   const enteredEmailIsValid = enteredEmail.includes("@");
   const enteredEmailIsInvalid = !enteredEmailIsValid && enteredEmailTouched;
 
+  const [enteredMobile, setEnteredMobile] = useState("");
+  const [enteredMobileTouched, setEnteredMobileTouched] = useState(false);
+  const enteredMobileIsValid = enteredMobile !== "";
+  const enteredMobileIsInvalid = !enteredMobileIsValid && enteredMobileTouched;
+
+  const [enteredPassword, setEnteredPassword] = useState({
+    password: "",
+    confirmPassword: "",
+  });
+  const [passwordErr, setPasswordErr] = useState("");
+  const [confirmPasswordErr, setConfirmPasswordErr] = useState("");
+  // const [passwordTouched, setPasswordTouched] = useState(false);
+  // const [confirmPasswordTouched, setConfirmPasswordTouched] = useState(false);
+  // const passwordValid =  passwordTouched && confirmPasswordTouched;
+
   const [signupIsValid, setSignupIsValid] = useState(false);
 
   let formIsValid = false;
 
-  if (enteredNameIsValid && enteredEmailIsValid) {
+  if (enteredNameIsValid && enteredEmailIsValid && enteredMobileIsValid ) {
     formIsValid = true;
   }
 
@@ -39,6 +54,53 @@ const Signup = () => {
     setEnteredEmailTouched(true);
   };
 
+  const mobileChangeHandler = (event) => {
+    setEnteredMobile(event.target.value);
+  };
+  const mobileBlurHandler = () => {
+    setEnteredMobileTouched(true);
+  };
+
+  const handlePasswordChange = (event) => {
+    const passwordValue = event.target.value.trim();
+    const passwordFieldName = event.target.name;
+    const newPassword = {
+      ...enteredPassword,
+      [passwordFieldName]: passwordValue,
+    };
+    setEnteredPassword(newPassword);
+  };
+  const handleValidation = (event) => {
+    const passwordValue = event.target.value.trim();
+    const passwordFieldName = event.target.name;
+
+    //for password
+    if (passwordFieldName === "password") {
+      const passwordLength = passwordValue.length;
+      let errMsg = "";
+      if (passwordLength === 0) {
+        errMsg = "Password is empty";
+      }else{
+        // setPasswordTouched(true);
+        errMsg='';
+      }
+      setPasswordErr(errMsg);
+    }
+
+    //for confirm password
+    if (
+      passwordFieldName === "confirmPassword" ||
+      (passwordFieldName === "password" &&
+        enteredPassword.confirmPassword.length > 0)
+    ) {
+      if (enteredPassword.confirmPassword !== enteredPassword.password) {
+        setConfirmPasswordErr("Confirm password is not matched");
+      } else {
+        // setConfirmPasswordTouched(true);
+        setConfirmPasswordErr("");
+      }
+    }
+  };
   async function formSubmissionHandler(event) {
     event.preventDefault();
 
@@ -50,10 +112,7 @@ const Signup = () => {
 
     setSignupIsValid(true);
 
-    setEnteredName("");
-    setEnteredNameTouched(false);
-    setEnteredEmail("");
-    setEnteredEmailTouched(false);
+    
 
     try {
       const response = await fetch("http://localhost:4000/api/auth/signup", {
@@ -64,6 +123,8 @@ const Signup = () => {
         body: {
           name: enteredName,
           email: enteredEmail,
+          mobile: enteredMobile,
+          password: enteredPassword.password,
         },
       });
       const result = response.json();
@@ -71,6 +132,19 @@ const Signup = () => {
     } catch (error) {
       console.error(error.message);
     }
+
+    setEnteredName("");
+    setEnteredNameTouched(false);
+    setEnteredEmail("");
+    setEnteredEmailTouched(false);
+    setEnteredMobile("");
+    setEnteredMobileTouched(false);
+    setEnteredPassword({
+      password: "",
+      confirmPassword: "",
+    });
+    // setPasswordTouched(false);
+    // setConfirmPasswordTouched(false);
   }
 
   return (
@@ -97,7 +171,6 @@ const Signup = () => {
                   </p>
                 )}
               </div>
-
               <div>
                 <label id="email">Email</label>
                 <input
@@ -114,15 +187,49 @@ const Signup = () => {
                   </p>
                 )}
               </div>
+              <div>
+                <label htmlFor="mobile">Mobile No.</label>
+                <input
+                  type="text"
+                  id="mobile"
+                  pattern="^[0-9]{1,10}$"
+                  value={enteredMobile}
+                  onChange={mobileChangeHandler}
+                  onBlur={mobileBlurHandler}
+                ></input>
+                {enteredMobileIsInvalid && (
+                  <p className={classes["error-text"]}>Enter Mobile Number.</p>
+                )}
+              </div>
+              <div>
+                <label htmlFor="password">Password</label>
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,16}$"
+                  onChange={handlePasswordChange}
+                  value={enteredPassword.password}
+                  onBlur={handleValidation}
+                  required
+                ></input>
+                <p className={classes["error-text"]}>{passwordErr}</p>
+              </div>
+              <div>
+                <label htmlFor="password">Confirm Password</label>
+                <input
+                  type="password"
+                  id="password"
+                  name="confirmPassword"
+                  pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,16}$"
+                  onChange={handlePasswordChange}
+                  value={enteredPassword.confirmPassword}
+                  onBlur={handleValidation}
+                  required
+                ></input>
+                <p className={classes["error-text"]}>{confirmPasswordErr}</p>
+              </div>
 
-              <label id="password">Password</label>
-              <input
-                type="password"
-                htmlFor="password"
-                pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,16}$"
-              ></input>
-              <label id="password">Correct Password</label>
-              <input type="password" htmlFor="password"></input>
               <div className={classes.signup}>
                 <Button disabled={!formIsValid}>Signup</Button>
               </div>
