@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import classes from "./Signup.module.css";
 import Button from "./UI/Button";
-import Login from "./Login";
+import Verified from "./Verified";
+// import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 const Signup = () => {
   const [enteredName, setEnteredName] = useState("");
@@ -31,10 +32,11 @@ const Signup = () => {
   // const passwordValid =  passwordTouched && confirmPasswordTouched;
 
   const [signupIsValid, setSignupIsValid] = useState(false);
+  // const history = useHistory();
 
   let formIsValid = false;
 
-  if (enteredNameIsValid && enteredEmailIsValid && enteredMobileIsValid ) {
+  if (enteredNameIsValid && enteredEmailIsValid && enteredMobileIsValid) {
     formIsValid = true;
   }
 
@@ -80,9 +82,9 @@ const Signup = () => {
       let errMsg = "";
       if (passwordLength === 0) {
         errMsg = "Password is empty";
-      }else{
+      } else {
         // setPasswordTouched(true);
-        errMsg='';
+        errMsg = "";
       }
       setPasswordErr(errMsg);
     }
@@ -101,6 +103,7 @@ const Signup = () => {
       }
     }
   };
+  let user;
   async function formSubmissionHandler(event) {
     event.preventDefault();
 
@@ -111,31 +114,37 @@ const Signup = () => {
     }
 
     setSignupIsValid(true);
-
-    
+    user = {
+      // id: Math.random().toString(),
+      name: enteredName.trim(),
+      email: enteredEmail.trim(),
+      // mobile: enteredMobile.trim(),
+      password: enteredPassword.password,
+      role: "Admin",
+    };
 
     try {
-      const response = await fetch("http://localhost:4000/api/auth/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: {
-          name: enteredName,
-          email: enteredEmail,
-          mobile: enteredMobile,
-          password: enteredPassword.password,
-        },
-      });
-      const result = response.json();
+      const response = await fetch(
+        "https://to-do-manage.onrender.com/api/auth/signup",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(user),
+        }
+      );
+      const result = await response.json();
       console.log(result);
     } catch (error) {
       console.error(error.message);
     }
 
+    // history.push('/Login');
+
     setEnteredName("");
     setEnteredNameTouched(false);
-    setEnteredEmail("");
+    // setEnteredEmail("");
     setEnteredEmailTouched(false);
     setEnteredMobile("");
     setEnteredMobileTouched(false);
@@ -207,7 +216,7 @@ const Signup = () => {
                   type="password"
                   id="password"
                   name="password"
-                  pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,16}$"
+                  // pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,16}$"
                   onChange={handlePasswordChange}
                   value={enteredPassword.password}
                   onBlur={handleValidation}
@@ -216,12 +225,12 @@ const Signup = () => {
                 <p className={classes["error-text"]}>{passwordErr}</p>
               </div>
               <div>
-                <label htmlFor="password">Confirm Password</label>
+                <label htmlFor="confirmPassword">Confirm Password</label>
                 <input
                   type="password"
-                  id="password"
+                  id="confirmPassword"
                   name="confirmPassword"
-                  pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,16}$"
+                  // pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,16}$"
                   onChange={handlePasswordChange}
                   value={enteredPassword.confirmPassword}
                   onBlur={handleValidation}
@@ -237,7 +246,7 @@ const Signup = () => {
           </div>
         </div>
       )}
-      {signupIsValid && <Login />}
+      {signupIsValid && <Verified email={enteredEmail}/>}
     </>
   );
 };

@@ -35,6 +35,7 @@ function App() {
   const [signUp, setSignUp] = useState(false);
   const [login, setLogin] = useState(false);
   const [taskList, setTaskList] = useState(tasks);
+  const [onLoginTo, setOnLoginTo] = useState(false);
 
   const addNewTasksHandler = (task) => {
     setTaskList((prevTask) => {
@@ -52,6 +53,7 @@ function App() {
       <Header
         loginHandler={loginHandler}
         signupHandler={signUpHandler}
+        login={onLoginTo}
       ></Header>
       <Main onAddNew={addNewTasksHandler}></Main>
       <TaskList tasks={taskList} deleteId={deleteTask} />
@@ -65,11 +67,16 @@ function App() {
     console.log("clicked");
     setSignUp(true);
   }
+  const loginToMainPage = (e) => {
+    // e.preventDefault();
+    setOnLoginTo(true);
+    console.log("12334");
+  };
   if (signUp) {
     content = <Signup />;
   }
   if (login) {
-    content = <Login />;
+    content = <Login onLogin={loginToMainPage} />;
   }
   return <React.Fragment>{content}</React.Fragment>;
 }
