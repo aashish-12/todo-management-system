@@ -19,7 +19,7 @@ const Header = (props) => {
         )}
         {props.login && (
           <div className={classes.buttons}>
-            <Button>Logout</Button>
+            <Button onClick={props.logout}>Logout</Button>
           </div>
         )}
         <hr></hr>

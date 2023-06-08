@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import Header from "./components/Header";
 import Main from "./components/Main";
@@ -35,30 +35,47 @@ function App() {
   const [signUp, setSignUp] = useState(false);
   const [login, setLogin] = useState(false);
   const [taskList, setTaskList] = useState(tasks);
-  const [onLoginTo, setOnLoginTo] = useState(false);
+  const [onLoginTo, setOnLoginTo] = useState({ loginConfirm: false });
+  const [token, setToken] = useState("");
+  const [logout, setLogout] = useState(false);
 
   const addNewTasksHandler = (task) => {
-    setTaskList((prevTask) => {
-      return [task, ...prevTask];
-    });
+    if (onLoginTo.loginConfirm === true) {
+      setTaskList((prevTask) => {
+        return [task, ...prevTask];
+      });
+    }
   };
   const deleteTask = (id) => {
     console.log(id);
     const newList = taskList.filter((task) => task.id !== id);
-    // console.log(newList);
-    setTaskList(newList);
+    if (onLoginTo.loginConfirm === true) {
+      setTaskList(newList);
+    }
   };
-  let content = (
-    <>
-      <Header
-        loginHandler={loginHandler}
-        signupHandler={signUpHandler}
-        login={onLoginTo}
-      ></Header>
-      <Main onAddNew={addNewTasksHandler}></Main>
-      <TaskList tasks={taskList} deleteId={deleteTask} />
-    </>
-  );
+  async function logoutHandler(event) {
+    // event.preventDefault();
+    try {
+      console.log(token);
+      const response = await fetch(
+        "https://to-do-manage.onrender.com/api/auth/logout",
+        {
+          method: "POST",
+          headers: new Headers({
+            Authorization: `Bearer ${token}`,
+          }),
+        }
+      );
+      const result = await response.json();
+      console.log(result.message);
+      if (result.message === "Logged out successfully") {
+        setLogout(true);
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
+
   function loginHandler() {
     console.log("login");
     setLogin(true);
@@ -67,18 +84,56 @@ function App() {
     console.log("clicked");
     setSignUp(true);
   }
-  const loginToMainPage = (e) => {
-    // e.preventDefault();
-    setOnLoginTo(true);
-    console.log("12334");
+  const loginToMainPage = (logedin) => {
+    // event.preventDefault();
+    console.log(logedin);
+    if (logedin.login === true) {
+      setOnLoginTo((prev) => {
+        prev.loginConfirm = true;
+        return { ...prev };
+      });
+    }
   };
-  if (signUp) {
-    content = <Signup />;
-  }
-  if (login) {
-    content = <Login onLogin={loginToMainPage} />;
-  }
-  return <React.Fragment>{content}</React.Fragment>;
+  const userToken = (tok) => {
+    setToken(tok);
+  };
+  return (
+    <React.Fragment>
+      {!signUp && !login && (
+        <>
+          <Header
+            loginHandler={loginHandler}
+            signupHandler={signUpHandler}
+          ></Header>
+          <Main onAddNew={addNewTasksHandler} loginValid={false}></Main>
+          <TaskList tasks={taskList} deleteId={deleteTask} />
+        </>
+      )}
+      {signUp && !login && <Signup />}
+      {login && !onLoginTo.loginConfirm && (
+        <Login onLogin={loginToMainPage} token={userToken} />
+      )}
+      {!logout && onLoginTo.loginConfirm && (
+        <>
+          <Header
+            loginHandler={loginHandler}
+            signupHandler={signUpHandler}
+            login={onLoginTo.loginConfirm}
+            logout={logoutHandler}
+          ></Header>
+          <Main onAddNew={addNewTasksHandler} loginValid={true}></Main>
+          <TaskList tasks={taskList} deleteId={deleteTask} />
+        </>
+      )}
+      {logout && (
+        <p
+          style={{ textAlign: "center", marginTop: "100px", fontSize: "30px" }}
+        >
+          Logged out successfully
+        </p>
+      )}
+    </React.Fragment>
+  );
 }
 
 export default App;

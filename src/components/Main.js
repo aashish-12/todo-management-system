@@ -24,10 +24,11 @@ const Main = (props) => {
   return (
     <>
       <section>
-        {!addTask && <Button onClick={createTaskHandler}>Create Task</Button>}
+        {<Button onClick={createTaskHandler}>Create Task</Button>}
       </section>
       <section className={classes.main}>
-        {addTask && <CreateTask  onAdd={addNewTask} onCancel={stopAdding}/>}
+        { props.loginValid  && addTask && <CreateTask  onAdd={addNewTask} onCancel={stopAdding}/>}
+        {/* {addTask && !props.loginValid && <Button onClick={createTaskHandler}>Create Task</Button>} */}
       </section>
     </>
   );

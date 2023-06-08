@@ -23,11 +23,38 @@ const Login = (props) => {
   const passwordHandler = (event) => {
     setEnteredPassword(event.target.value);
   };
+  async function loginSubmit(event) {
+    event.preventDefault();
+    const loginDetail = {
+      email: enteredEmail.trim(),
+      password: enteredPassword.trim(),
+    };
 
+    try {
+      const response = await fetch(
+        "https://to-do-manage.onrender.com/api/auth/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(loginDetail),
+        }
+      );
+      const result = await response.json();
+      console.log(result);
+      if(result.token){
+        props.onLogin({login: true});
+        props.token(result.token);
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
   let content = (
     <div className={classes.container}>
       <div>
-        <form>
+        <form onSubmit={loginSubmit}>
           <h1>Login</h1>
           <input
             type="email"
@@ -51,9 +78,7 @@ const Login = (props) => {
             // pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,16}$"
           ></input>
           <div className={classes.login}>
-            <Button disabled={!valid} onClick={props.onLogin}>
-              Login
-            </Button>
+            <Button disabled={!valid}>Login</Button>
             <Button onClick={signUpHandler}>SignUp</Button>
           </div>
         </form>
@@ -63,10 +88,6 @@ const Login = (props) => {
   function signUpHandler() {
     setSignUp(true);
   }
-  // function onLogin() {
-  //   console.log("login12345");
-  //   props.onLogin();
-  // }
   if (signUp) {
     content = <Signup />;
   }
